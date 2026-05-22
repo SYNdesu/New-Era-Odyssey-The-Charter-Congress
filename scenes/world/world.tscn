@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://ci6p6yotqr7qn"]
+
+[ext_resource type="Script" uid="uid://ckkl60lhx8wy6" path="res://scripts/world/world.gd" id="1_world"]
+[ext_resource type="Script" uid="uid://d2pjuynjwsg6v" path="res://scripts/world/states/exploration_state.gd" id="2_explore"]
+[ext_resource type="Script" uid="uid://s80rli7hqhjw" path="res://scripts/world/states/combat_state.gd" id="3_combat"]
+[ext_resource type="Script" uid="uid://qhy8d77peapr" path="res://scripts/world/states/loading_state.gd" id="4_loading"]
+[ext_resource type="Script" uid="uid://3n8cgnrmw6ip" path="res://scripts/world/states/main_menu_state.gd" id="5_main_menu"]
+[ext_resource type="Script" uid="uid://dap31ohyjsk8l" path="res://scripts/world/states/paused_state.gd" id="7_paused"]
+[ext_resource type="Script" uid="uid://bwedsosvy0uxb" path="res://scripts/world/states/saving_state.gd" id="8_saving"]
+[ext_resource type="Script" uid="uid://dpkbe3odnfb7c" path="res://scripts/world/states/exiting_state.gd" id="9_exiting"]
+
+[sub_resource type="Animation" id="anim_placeholder"]
+resource_name = "placeholder"
+loop_mode = 1
+
+[sub_resource type="AnimationLibrary" id="anim_lib"]
+_data = {
+&"placeholder": SubResource("anim_placeholder")
+}
+
+[node name="World" type="Node2D" unique_id=1662735110]
+script = ExtResource("1_world")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1377317245]
+libraries/ = SubResource("anim_lib")
+
+[node name="WorldHSM" type="LimboHSM" parent="." unique_id=512927836]
+
+[node name="LoadingState" type="LimboState" parent="WorldHSM" unique_id=2086454808]
+script = ExtResource("4_loading")
+
+[node name="MainMenuState" type="LimboState" parent="WorldHSM" unique_id=1873754408]
+script = ExtResource("5_main_menu")
+
+[node name="GameplayHSM" type="LimboHSM" parent="WorldHSM" unique_id=1651967268]
+
+[node name="ExplorationState" type="LimboState" parent="WorldHSM/GameplayHSM" unique_id=481402465]
+script = ExtResource("2_explore")
+
+[node name="CombatState" type="LimboState" parent="WorldHSM/GameplayHSM" unique_id=828058423]
+script = ExtResource("3_combat")
+
+[node name="PausedState" type="LimboState" parent="WorldHSM/GameplayHSM" unique_id=2082626293]
+script = ExtResource("7_paused")
+
+[node name="SavingState" type="LimboState" parent="WorldHSM" unique_id=992793147]
+script = ExtResource("8_saving")
+
+[node name="ExitingState" type="LimboState" parent="WorldHSM" unique_id=196672486]
+script = ExtResource("9_exiting")

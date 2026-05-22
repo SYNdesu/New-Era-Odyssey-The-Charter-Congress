@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://c7suuoy3d7n8m"]
+
+[ext_resource type="TileSet" uid="uid://dcbo8bqcnhwyp" path="res://assets/tileset/game_tileset.tres" id="1_tileset"]
+[ext_resource type="Script" uid="uid://d2fiq1q4qucj4" path="res://scripts/world/components/area_portal.gd" id="2_portal"]
+[ext_resource type="Script" uid="uid://n0rhexbacn1u" path="res://scripts/world/components/spawn_point.gd" id="3_spawn"]
+
+[sub_resource type="RectangleShape2D" id="portal_shape"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="wall_h"]
+size = Vector2(1920, 20)
+
+[sub_resource type="RectangleShape2D" id="wall_v"]
+size = Vector2(20, 1080)
+
+[node name="WorldMain" type="Node2D" unique_id=445034073]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=422629505]
+tile_set = ExtResource("1_tileset")
+
+[node name="YSort" type="Node2D" parent="." unique_id=1533463970]
+y_sort_enabled = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=887741452]
+position = Vector2(960, 540)
+script = ExtResource("3_spawn")
+portal_id = "world_main"
+
+[node name="PortalToTown01" type="Area2D" parent="." unique_id=1208780291]
+position = Vector2(200, 540)
+script = ExtResource("2_portal")
+target_scene = "res://scenes/world/areas/town_01.tscn"
+target_portal = "from_world"
+portal_display_name = "城镇①"
+destination_hint = "冒险者的聚集地"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToTown01" unique_id=2029777589]
+shape = SubResource("portal_shape")
+
+[node name="Visual" type="ColorRect" parent="PortalToTown01" unique_id=286770787]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0, 1, 0, 0.5)
+
+[node name="PortalToTown02" type="Area2D" parent="." unique_id=1222126173]
+position = Vector2(1720, 540)
+script = ExtResource("2_portal")
+target_scene = "res://scenes/world/areas/town_02.tscn"
+target_portal = "from_world"
+portal_display_name = "城镇②"
+destination_hint = "商人们的贸易站"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToTown02" unique_id=2111079150]
+shape = SubResource("portal_shape")
+
+[node name="Visual" type="ColorRect" parent="PortalToTown02" unique_id=771400162]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0, 1, 0, 0.5)
+
+[node name="BoundaryWalls" type="StaticBody2D" parent="." unique_id=847347257]
+
+[node name="Top" type="CollisionShape2D" parent="BoundaryWalls" unique_id=342786343]
+position = Vector2(960, -10)
+shape = SubResource("wall_h")
+
+[node name="Bottom" type="CollisionShape2D" parent="BoundaryWalls" unique_id=924067866]
+position = Vector2(960, 1090)
+shape = SubResource("wall_h")
+
+[node name="Left" type="CollisionShape2D" parent="BoundaryWalls" unique_id=1455947174]
+position = Vector2(-10, 540)
+shape = SubResource("wall_v")
+
+[node name="Right" type="CollisionShape2D" parent="BoundaryWalls" unique_id=1997282424]
+position = Vector2(1930, 540)
+shape = SubResource("wall_v")

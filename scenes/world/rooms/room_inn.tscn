@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://roominn001"]
+
+[ext_resource type="TileSet" path="res://assets/tileset/game_tileset.tres" id="1_tileset"]
+[ext_resource type="Script" uid="uid://d2fiq1q4qucj4" path="res://scripts/world/components/area_portal.gd" id="2_portal"]
+[ext_resource type="Script" uid="uid://n0rhexbacn1u" path="res://scripts/world/components/spawn_point.gd" id="3_spawn"]
+[ext_resource type="Script" uid="uid://7xjqjxgjldc7" path="res://scripts/world/components/interactable_object.gd" id="4_interact"]
+
+[sub_resource type="RectangleShape2D" id="portal_shape"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="wall_h"]
+size = Vector2(640, 20)
+
+[sub_resource type="RectangleShape2D" id="wall_v"]
+size = Vector2(20, 480)
+
+[sub_resource type="RectangleShape2D" id="obj_shape"]
+size = Vector2(32, 32)
+
+[node name="RoomInn" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("1_tileset")
+
+[node name="YSort" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="FromTown" type="Marker2D" parent="."]
+position = Vector2(320, 400)
+script = ExtResource("3_spawn")
+portal_id = "from_town"
+
+[node name="PortalToTown" type="Area2D" parent="."]
+position = Vector2(320, 420)
+script = ExtResource("2_portal")
+target_scene = "res://scenes/world/areas/town_01.tscn"
+target_portal = "from_world"
+portal_display_name = "离开旅店"
+destination_hint = "返回城镇"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToTown"]
+shape = SubResource("portal_shape")
+
+[node name="Visual" type="ColorRect" parent="PortalToTown"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(1, 0, 0, 0.5)
+
+[node name="BoundaryWalls" type="StaticBody2D" parent="."]
+
+[node name="Top" type="CollisionShape2D" parent="BoundaryWalls"]
+position = Vector2(320, -10)
+shape = SubResource("wall_h")
+
+[node name="Bottom" type="CollisionShape2D" parent="BoundaryWalls"]
+position = Vector2(320, 490)
+shape = SubResource("wall_h")
+
+[node name="Left" type="CollisionShape2D" parent="BoundaryWalls"]
+position = Vector2(-10, 240)
+shape = SubResource("wall_v")
+
+[node name="Right" type="CollisionShape2D" parent="BoundaryWalls"]
+position = Vector2(650, 240)
+shape = SubResource("wall_v")
+
+[node name="Bed" type="StaticBody2D" parent="."]
+position = Vector2(150, 150)
+script = ExtResource("4_interact")
+object_name = "床"
+display_name = "旅店的床"
+description = "休息恢复体力"
+interaction_text = "休息"
+
+[node name="Sprite2D" type="Sprite2D" parent="Bed"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed"]
+shape = SubResource("obj_shape")
+
+[node name="Visual" type="ColorRect" parent="Bed"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.5, 0.2, 0.8, 0.8)
+
+[node name="Chest" type="StaticBody2D" parent="."]
+position = Vector2(500, 150)
+script = ExtResource("4_interact")
+object_name = "宝箱"
+display_name = "木制宝箱"
+description = "存放旅途战利品"
+interaction_text = "打开"
+
+[node name="Sprite2D" type="Sprite2D" parent="Chest"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Chest"]
+shape = SubResource("obj_shape")
+
+[node name="Visual" type="ColorRect" parent="Chest"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(1, 0.8, 0, 0.8)

@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://town02001"]
+
+[ext_resource type="TileSet" path="res://assets/tileset/game_tileset.tres" id="1_tileset"]
+[ext_resource type="Script" uid="uid://d2fiq1q4qucj4" path="res://scripts/world/components/area_portal.gd" id="2_portal"]
+[ext_resource type="Script" uid="uid://n0rhexbacn1u" path="res://scripts/world/components/spawn_point.gd" id="3_spawn"]
+[ext_resource type="Script" uid="uid://7xjqjxgjldc7" path="res://scripts/world/components/interactable_object.gd" id="4_interact"]
+
+[sub_resource type="RectangleShape2D" id="portal_shape"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="wall_h"]
+size = Vector2(960, 20)
+
+[sub_resource type="RectangleShape2D" id="wall_v"]
+size = Vector2(20, 540)
+
+[sub_resource type="RectangleShape2D" id="obj_shape"]
+size = Vector2(32, 32)
+
+[node name="Town02" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("1_tileset")
+
+[node name="YSort" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="FromWorld" type="Marker2D" parent="."]
+position = Vector2(480, 480)
+script = ExtResource("3_spawn")
+portal_id = "from_world"
+
+[node name="PortalToWorld" type="Area2D" parent="."]
+position = Vector2(480, 500)
+script = ExtResource("2_portal")
+target_scene = "res://scenes/world/world_main.tscn"
+target_portal = "world_main"
+portal_display_name = "城镇出口"
+destination_hint = "返回世界地图"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToWorld"]
+shape = SubResource("portal_shape")
+
+[node name="Visual" type="ColorRect" parent="PortalToWorld"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(1, 0, 0, 0.5)
+
+[node name="PortalToShop" type="Area2D" parent="."]
+position = Vector2(760, 200)
+script = ExtResource("2_portal")
+target_scene = "res://scenes/world/rooms/room_shop.tscn"
+target_portal = "from_town"
+portal_display_name = "道具商店"
+destination_hint = "购买装备与药剂"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToShop"]
+shape = SubResource("portal_shape")
+
+[node name="Visual" type="ColorRect" parent="PortalToShop"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0, 0, 1, 0.5)
+
+[node name="BoundaryWalls" type="StaticBody2D" parent="."]
+
+[node name="Top" type="CollisionShape2D" parent="BoundaryWalls"]
+position = Vector2(480, -10)
+shape = SubResource("wall_h")
+
+[node name="Bottom" type="CollisionShape2D" parent="BoundaryWalls"]
+position = Vector2(480, 550)
+shape = SubResource("wall_h")
+
+[node name="Left" type="CollisionShape2D" parent="BoundaryWalls"]
+position = Vector2(-10, 270)
+shape = SubResource("wall_v")
+
+[node name="Right" type="CollisionShape2D" parent="BoundaryWalls"]
+position = Vector2(970, 270)
+shape = SubResource("wall_v")
+
+[node name="NPC_Shopkeeper" type="StaticBody2D" parent="."]
+position = Vector2(260, 300)
+script = ExtResource("4_interact")
+object_name = "商人"
+display_name = "旅行商人"
+description = "出售稀有道具"
+
+[node name="Sprite2D" type="Sprite2D" parent="NPC_Shopkeeper"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NPC_Shopkeeper"]
+shape = SubResource("obj_shape")
+
+[node name="Visual" type="ColorRect" parent="NPC_Shopkeeper"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(1, 0.5, 0, 0.8)
